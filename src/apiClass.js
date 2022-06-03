@@ -98,6 +98,9 @@ export default class Contenedor {
             allProductsArray.splice(index, 1);
             // aca deberia ver que no entre al write antes de resolver el splice de arriba!
             await this.write(allProductsArray);
+            return true
+        } else {
+            return false
         }
     }
 
@@ -110,6 +113,9 @@ export default class Contenedor {
             allProductsArray.splice(index, 1, product);
             // aca deberia ver que no entre al write antes de resolver el splice de arriba!
             this.write(allProductsArray);
+            return true
+        } else {
+            return false
         }
     }
 
