@@ -6,23 +6,6 @@ export default class Contenedor {
         this.file = __dirname + file;
     }
 
-/*     async createFile() {
-        try {
-            if (fs.existsSync(this.file)) {
-                console.log('El archivo ya existe, entonces no hago nada');
-                return false
-            } else {
-                console.log('El archivo no existe, entonces lo creo!');
-                await fs.promises.writeFile(file_path, '', 'utf8');
-                return true
-            }
-        } catch (err) {
-            console.log('Error en la creación del archivo', err);
-            return false;
-        }
-    } */
-
-
 // las primeras 3 son funciones accesorias para armar más facilmente los pedidos y escritura de la base de datos    
     async read() {
      let allProductsArray = [];
@@ -58,10 +41,10 @@ export default class Contenedor {
 
     // Esta forma de hacer saveNew no es la más eficiente, estamos leyendo el archivo tanto en el getNextID como en el read. Poderia hacerse de forma tal de leer el archivo una sola vez
     async saveNew(product) {
-        console.log(product);
         try {
             let nextId = await this.getNextId();  
             product.id = nextId;
+            console.log(product)
             const allProductsArray = await this.read();
             allProductsArray.push(product);
             await this.write(allProductsArray);
@@ -71,7 +54,6 @@ export default class Contenedor {
             console.log('Error al guardar un objeto', err);
         }
     }
-
 
     async getById(id) {
         try {
@@ -119,9 +101,21 @@ export default class Contenedor {
         }
     }
 
-    deleteAll() {
+    async deleteProductById(id_prod, id, cart) {
+        let index = await cart.products.findIndex(product => product.id == id_prod);
+        // findIndex devuelve -1 si no encuentra el valor, entonces podemos usar el if de abajo para saber si encontro un valor.
+        if (index >= 0) {
+            cart.products.splice(index, 1);
+            await this.replaceById(id, cart);
+            return cart
+        } else {
+            return false
+        }
+    }
+
+/*     deleteAll() {
         let allProductsArray = [];
         this.write(allProductsArray);
-    }
+    } */
 
 }

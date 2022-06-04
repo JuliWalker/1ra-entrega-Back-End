@@ -30,6 +30,7 @@ router.get('/:id', async (req,res)=>{
 
 router.post('/', access, async (req,res)=>{
     const obj = req.body
+    obj.timestamps = Date.now()
     const newId= await api.saveNew(obj)
     res.json(newId)
 })
@@ -37,6 +38,7 @@ router.post('/', access, async (req,res)=>{
 router.put('/:id', access, async (req,res)=>{
     const {id} = req.params
     const obj = req.body
+    obj.timestamps = Date.now()
     const exito = await api.replaceById(id, obj)
     if (exito) {
         res.json("producto reemplazado con exito")
